@@ -1,0 +1,34 @@
+{
+  "entities": {
+    "Portfolio": {
+      "title": "Portfolio",
+      "description": "User generated portfolio data",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "bio": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "github": { "type": "string" },
+        "linkedin": { "type": "string" },
+        "whatsapp": { "type": "string" },
+        "skills": { "type": "array", "items": { "type": "string" } },
+        "projects": { "type": "array" },
+        "experience": { "type": "array" },
+        "education": { "type": "array" },
+        "userId": { "type": "string" },
+        "slug": { "type": "string" },
+        "template": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "role", "userId", "slug", "template"]
+    }
+  },
+  "firestore": {
+    "/portfolios/{portfolioId}": {
+      "schema": "Portfolio",
+      "description": "Collection of user portfolios"
+    }
+  }
+}

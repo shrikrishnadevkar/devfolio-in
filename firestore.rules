@@ -1,0 +1,56 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Portfolios
+    match /portfolios/{portfolioId} {
+      function isValidPortfolio(data) {
+        return data.name is string && data.name.size() <= 100
+          && data.userId is string && data.userId.size() <= 128
+          && data.slug is string && data.slug.size() <= 100
+          && data.template is string && data.template.size() <= 50;
+      }
+
+      // Publicly readable
+      allow get: if true;
+      allow list: if true;
+
+      allow create: if isSignedIn() 
+        && isOwner(incoming().userId)
+        && isValidPortfolio(incoming())
+        && incoming().createdAt == request.time;
+
+      allow update: if isOwner(existing().userId)
+        && isOwner(incoming().userId)
+        && isValidPortfolio(incoming())
+        && (incoming().diff(existing()).affectedKeys().hasOnly(['name', 'role', 'bio', 'email', 'phone', 'github', 'linkedin', 'whatsapp', 'skills', 'projects', 'experience', 'education', 'template', 'updatedAt']))
+        && (incoming().updatedAt == request.time || !incoming().keys().contains('updatedAt'));
+
+      allow delete: if isOwner(existing().userId);
+    }
+  }
+}

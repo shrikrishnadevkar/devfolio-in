@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Syne", sans-serif;
+  --color-dark-bg: #0A0A0B;
+  --color-glass-bg: rgba(23, 23, 23, 0.8);
+  --color-emerald-accent: #10B981;
+  --color-indigo-accent: #6366F1;
+}
+
+body {
+  background-color: var(--color-dark-bg);
+  color: #E5E7EB;
+  font-family: var(--font-sans);
+  scroll-behavior: smooth;
+}
+
+.glass {
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.scanner-active {
+  border-color: var(--color-emerald-accent);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+}
+
+.plan-card {
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.plan-card:hover {
+  border-color: var(--color-indigo-accent);
+  background: rgba(99, 102, 241, 0.05);
+}
+
